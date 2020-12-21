@@ -7,13 +7,13 @@ mkdir ./out;
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
-cp ./*.txt ./out
-cp ./*.c ./out
-cp ./*.h ./out
+cp ./*.txt ./out 2>/dev/nul
+cp ./*.c ./out 2>/dev/nul
+cp ./*.h ./out 2>/dev/nul
 
 bison -dv -o./out/yacc.c ./index.y
 flex -o./out/lex.c ./index.l
-$gcc ./out/main.c ./out/yacc.c ./out/lex.c -I./out -o./out/index
+$gcc ./out/index.c ./out/yacc.c ./out/lex.c -I./out -o./out/index
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
