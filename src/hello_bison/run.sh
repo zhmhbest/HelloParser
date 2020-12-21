@@ -11,6 +11,8 @@ cp ./*.txt ./out 2>/dev/nul
 cp ./*.c ./out 2>/dev/nul
 cp ./*.h ./out 2>/dev/nul
 
+# bison -d: 生成.h
+# bison -v: 生成.output
 bison -dv -o./out/yacc.c ./index.y
 flex -o./out/lex.c ./index.l
 $gcc ./out/index.c ./out/yacc.c ./out/lex.c -I./out -o./out/index

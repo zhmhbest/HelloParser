@@ -16,23 +16,22 @@
 %%
 
 calclist: /* nothing */
-| calclist exp EOL {
+ | calclist exp EOL {
      printf("= %4.4g\n", eval($2));
      treefree($2);
      printf("> ");
  }
-
  | calclist EOL { printf("> "); } /* blank line or a comment */
  ;
 
 exp: factor
- | exp '+' factor { $$ = newast('+', $1,$3); }
- | exp '-' factor { $$ = newast('-', $1,$3);}
+ | exp '+' factor { $$ = newast('+', $1, $3); }
+ | exp '-' factor { $$ = newast('-', $1, $3);}
  ;
 
 factor: term
- | factor '*' term { $$ = newast('*', $1,$3); }
- | factor '/' term { $$ = newast('/', $1,$3); }
+ | factor '*' term { $$ = newast('*', $1, $3); }
+ | factor '/' term { $$ = newast('/', $1, $3); }
  ;
 
 term: NUMBER   { $$ = newnum($1); }
