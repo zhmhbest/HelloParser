@@ -1,5 +1,6 @@
 %{
-#include "common.h"
+#include "flex_bison.h"
+#include "ast.h"
 %}
 
 %union {
@@ -17,26 +18,25 @@
 
 calclist: /* nothing */
  | calclist exp EOL {
-     printf("= %4.4g\n", eval($2));
-     treefree($2);
+     printf("= %4.4g\n", ast_eval($2));
+     ast_free($2);
      printf("> ");
  }
- | calclist EOL { printf("> "); } /* blank line or a comment */
+ | calclist EOL { printf("> "); }
  ;
 
 exp: factor
- | exp '+' factor { $$ = newast('+', $1, $3); }
- | exp '-' factor { $$ = newast('-', $1, $3);}
+ | exp '+' factor { $$ = ast_new('+', $1, $3); }
+ | exp '-' factor { $$ = ast_new('-', $1, $3);}
  ;
 
 factor: term
- | factor '*' term { $$ = newast('*', $1, $3); }
- | factor '/' term { $$ = newast('/', $1, $3); }
+ | factor '*' term { $$ = ast_new('*', $1, $3); }
+ | factor '/' term { $$ = ast_new('/', $1, $3); }
  ;
 
-term: NUMBER   { $$ = newnum($1); }
- | '|' term    { $$ = newast('|', $2, NULL); }
+term: NUMBER   { $$ = ast_float($1); }
  | '(' exp ')' { $$ = $2; }
- | '-' term    { $$ = newast('M', $2, NULL); }
+ | '-' term    { $$ = ast_new('M', $2, NULL); }
  ;
 %%

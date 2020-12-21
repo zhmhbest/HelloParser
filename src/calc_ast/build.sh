@@ -9,10 +9,9 @@ mkdir ./out;
 
 cp ./*.txt ./out 2>/dev/nul
 cp ./*.c ./out 2>/dev/nul
-cp ./*.inl ./out 2>/dev/nul
 cp ./*.h ./out 2>/dev/nul
 
 bison -d -o./out/yacc.c ./index.y
 flex -o./out/lex.c ./index.l
 cd ./out
-$gcc index.c yacc.c lex.c -I. -oindex
+$gcc `ls -b *.c` -I. -oindex
