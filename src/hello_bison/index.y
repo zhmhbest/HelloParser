@@ -4,7 +4,7 @@
 
 /* 定义yylval的类型 */
 %union {
-  // const char* string_t;
+  const char* string_t;
   int         operation_t;
   int64_t     integer_t;
   double      float_t;

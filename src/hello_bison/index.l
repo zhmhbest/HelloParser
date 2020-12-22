@@ -14,6 +14,7 @@ FLOAT           {INTEGER}\.{INTEGER}
 
 %%
 
+{LINE}  { /* ignore */ }
 ";"     { yylval.operation_t = TT_EOS; return TT_EOS; }
 "+"     { yylval.operation_t = TT_Add; return TT_Add; }
 "-"     { yylval.operation_t = TT_Sub; return TT_Sub; }
@@ -21,18 +22,17 @@ FLOAT           {INTEGER}\.{INTEGER}
 "/"     { yylval.operation_t = TT_Div; return TT_Div; }
 "**"    { yylval.operation_t = TT_Pow; return TT_Pow; }
 
-"-"?{INTEGER}   {
+{INTEGER}   {
     yylval.integer_t = atoi(yytext);
     return TT_Integer;
 }
 
-"-"?{FLOAT}     {
+{FLOAT}     {
     yylval.float_t = atof(yytext);
     return TT_Float;
 }
 
 {BLANK}+                { /* ignore */ }
-{LINE}                  { /* ignore */ }
 
 "/*"                    { BEGIN COMMENT_BLOC; }
 <COMMENT_BLOC>.         { /* ignore */ }
@@ -44,8 +44,7 @@ FLOAT           {INTEGER}\.{INTEGER}
 <COMMENT_LINE>{LINE}    { BEGIN INITIAL; }
 
 .                       {
-    fprintf(stderr, "Unexcept char '%s' at line: %d.\n", yytext, yylineno);
-    exit(1);
+    yyerror("unexcept char '%s'.", yytext);
 }
 
 %%
