@@ -8,26 +8,26 @@
   double d;
 }
 
-/* declare tokens */
 %token <d> NUMBER
+/* %token OPS */
 %token EOL
 
-%type <a> exp factor term
+%type <a> expression factor term
 
 %%
 
-calclist: /* nothing */
- | calclist exp EOL {
+statements: /* nothing */
+ | statements expression EOL {
      printf("= %4.4g\n", ast_eval($2));
      ast_free($2);
      printf("> ");
  }
- | calclist EOL { printf("> "); }
+ | statements EOL { printf("> "); }
  ;
 
-exp: factor
- | exp '+' factor { $$ = ast_new('+', $1, $3); }
- | exp '-' factor { $$ = ast_new('-', $1, $3);}
+expression: factor
+ | expression '+' factor { $$ = ast_new('+', $1, $3); }
+ | expression '-' factor { $$ = ast_new('-', $1, $3);}
  ;
 
 factor: term
@@ -35,8 +35,8 @@ factor: term
  | factor '/' term { $$ = ast_new('/', $1, $3); }
  ;
 
-term: NUMBER   { $$ = ast_float($1); }
- | '(' exp ')' { $$ = $2; }
- | '-' term    { $$ = ast_new('M', $2, NULL); }
+term: NUMBER          { $$ = ast_float($1); }
+ | '(' expression ')' { $$ = $2; }
+ | '-' term           { $$ = ast_new('M', $2, NULL); }
  ;
 %%
