@@ -13,8 +13,11 @@ extern int yylex(void);
 // Bison
 #ifndef YYSTYPE_IS_DECLARED
     #include "yacc.h"
+    // extern enum yytokentype;
+    // extern union YYSTYPE;
 #endif
-// extern enum yytokentype;
-// extern YYSTYPE yylval;
+extern YYSTYPE yylval;
 extern int yyparse(void);
 extern void yyerror(const char *, ...);
+
+// #define YYDEBUG 1
