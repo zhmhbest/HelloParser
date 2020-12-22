@@ -15,9 +15,9 @@ cp ./*.h ./out 2>/dev/nul
 # bison -v: 生成.output
 bison -dv -o./out/yacc.c ./index.y
 flex -o./out/lex.c ./index.l
-$gcc ./out/index.c ./out/yacc.c ./out/lex.c -I./out -o./out/index
+cd ./out
+$gcc `ls -b *.c` -I. -oindex
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
-cd ./out
 ./index

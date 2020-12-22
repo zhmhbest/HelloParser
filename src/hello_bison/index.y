@@ -1,5 +1,5 @@
 %{
-#include "common.h"
+#include "flex_bison.h"
 %}
 
 /* 定义yylval的类型 */
@@ -70,8 +70,3 @@ number:
   ;
 
 %%
-
-void yyerror(const char *s) {
-    fprintf(stderr, "error: %s\n", s);
-    exit(1);
-}

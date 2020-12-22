@@ -1,4 +1,4 @@
-#include "common.h"
+#include "flex_bison.h"
 
 int main() {
     yyin = fopen("./input.txt", "r");

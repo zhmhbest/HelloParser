@@ -1,7 +1,6 @@
-%option noyywrap yylineno
-
+%option noyywrap nodefault yylineno
 %{
-#include "common.h"
+#include "flex_bison.h"
 %}
 
 %x COMMENT_LINE
