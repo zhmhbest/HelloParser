@@ -10,25 +10,25 @@
 }
 
 /* 定义Token类型 */
-/* 定义返回指定Token时yylval的类型 */
 %token TT_EOS  // End of Statement
 %token TT_Pow
 
+/* 定义返回指定Token时yylval的类型 */
 %token <integer_t>    TT_Integer
 %token <float_t>      TT_Float
 
+/* 定义文法类型 */
 %type <float_t>     expression
 %type <float_t>     number
 
 /* 定义运算优先级 */
-%left '+' '-'
-%left '*' '/'
-%left TT_Pow
-
 /* %left      左结合
  * %right     右结合
  * %nonassoc  不可结合
  */
+%left '+' '-'
+%left '*' '/'
+%left TT_Pow
 
 /* 文法的开始符号（省略则默认第一条） */
 %start statements
