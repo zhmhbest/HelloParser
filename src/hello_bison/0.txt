@@ -1,0 +1,27 @@
+
+expression:
+    term
+  | expression TT_Add term {
+    $$ = $1 + $3;
+  }
+  | expression TT_Sub term {
+    $$ = $1 - $3;
+  }
+  ;
+
+term:
+    factor
+  | term TT_Mul factor {
+      $$ = $1 * $3;
+  }
+  | term TT_Div factor {
+      $$ = $1 / $3;
+  }
+  ;
+
+factor:
+    number
+  | factor TT_Pow number {
+      $$ = pow($1, $3);
+  }
+  ;

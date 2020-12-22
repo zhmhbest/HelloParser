@@ -7,27 +7,33 @@
 %x COMMENT_BLOC
 
 DIGIT   [0-9]
-BLANK   [\ \f\r\t\v]
+BLANK   [\ \t]
 LINE    (\r\n|\n|\r)
+
 INTEGER         {DIGIT}+
-FLOAT           {INTEGER}\.{INTEGER}
+FLOAT           {INTEGER}"."{INTEGER}?
+EXPONENT        ({INTEGER}|{FLOAT})([eE][-+]?{INTEGER})
 
 %%
 
-{LINE}  { /* ignore */ }
-";"     { yylval.operation_t = TT_EOS; return TT_EOS; }
-"+"     { yylval.operation_t = TT_Add; return TT_Add; }
-"-"     { yylval.operation_t = TT_Sub; return TT_Sub; }
-"*"     { yylval.operation_t = TT_Mul; return TT_Mul; }
-"/"     { yylval.operation_t = TT_Div; return TT_Div; }
-"**"    { yylval.operation_t = TT_Pow; return TT_Pow; }
+{LINE}  |
+";"     { return TT_EOS; }
+
+"+" |
+"-" |
+"*" |
+"/" |
+"(" |
+")"     { return yytext[0]; }
+"**"    { return TT_Pow; }
 
 {INTEGER}   {
     yylval.integer_t = atoi(yytext);
     return TT_Integer;
 }
 
-{FLOAT}     {
+{FLOAT}    |
+{EXPONENT} {
     yylval.float_t = atof(yytext);
     return TT_Float;
 }
