@@ -1,25 +1,27 @@
 %{
 #include "flex_bison.h"
+#include "ast.h"
 %}
 
 /* 定义yylval的类型 */
 %union {
-  const char* string_t;
-  int64_t     integer_t;
-  double      float_t;
+  int64_t     Integer;
+  double      Float;
+  struct ast* AST;
 }
 
 /* 定义Token类型 */
-%token TT_EOS  // End of Statement
-%token TT_Pow
+%token TT_EOS       // End of Statement
+%token TT_Pow       // 次幂
+%token TT_Negative  // 取负
 
 /* 定义返回指定Token时yylval的类型 */
-%token <integer_t>    TT_Integer
-%token <float_t>      TT_Float
+%token <Integer>    TT_Integer
+%token <Float>      TT_Float
 
 /* 定义文法类型 */
-%type <float_t>     expression
-%type <float_t>     number
+%type <AST>         expression
+%type <Float>       number
 
 /* 定义运算优先级 */
 /* %left      左结合
@@ -41,19 +43,22 @@ statements:
   ;
 
 statement:
-   expression TT_EOS { printf(">%lf\n", $1); }
- | TT_EOS
- ;
+    expression TT_EOS {
+        printf(">%lf\n", ast_eval($1));
+        ast_free($1);
+    }
+  | /* nothing */ TT_EOS
+  ;
 
 expression:
-    number
-  | expression '+' expression  { $$ = $1 + $3; }
-  | expression '-' expression  { $$ = $1 - $3; }
-  | expression '*' expression  { $$ = $1 * $3; }
-  | expression '/' expression  { $$ = $1 / $3; }
-  | expression TT_Pow expression  { $$ = pow($1, $3); }
+    number                        { $$ = ast_float($1); }
   | '(' expression ')'            { $$ = $2; }
-  | '-' expression                { $$ = -$2; }
+  | expression '+' expression     { $$ = ast_new('+', $1, $3); }
+  | expression '-' expression     { $$ = ast_new('-', $1, $3); }
+  | expression '*' expression     { $$ = ast_new('*', $1, $3); }
+  | expression '/' expression     { $$ = ast_new('/', $1, $3); }
+  | expression TT_Pow expression  { $$ = ast_new(TT_Pow, $1, $3); }
+  | '-' expression                { $$ = ast_new(TT_Negative, $2, NULL); }
   ;
 
 number:

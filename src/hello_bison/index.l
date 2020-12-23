@@ -28,13 +28,13 @@ EXPONENT        ({INTEGER}|{FLOAT})([eE][-+]?{INTEGER})
 "**"    { return TT_Pow; }
 
 {INTEGER}   {
-    yylval.integer_t = atoi(yytext);
+    yylval.Integer = atoi(yytext);
     return TT_Integer;
 }
 
 {FLOAT}    |
 {EXPONENT} {
-    yylval.float_t = atof(yytext);
+    yylval.Float = atof(yytext);
     return TT_Float;
 }
 
@@ -50,7 +50,7 @@ EXPONENT        ({INTEGER}|{FLOAT})([eE][-+]?{INTEGER})
 <COMMENT_LINE>{LINE}    { BEGIN INITIAL; }
 
 .                       {
-    yyerror("unexcept char '%s'.", yytext);
+    yyerror("unexcept char");
 }
 
 %%
