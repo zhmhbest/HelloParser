@@ -14,6 +14,7 @@
 %token TT_EOS       // End of Statement
 %token TT_Pow       // 次幂
 %token TT_Negative  // 取负
+%token TT_ECHO      // 关键字：echo
 
 /* 定义返回指定Token时yylval的类型 */
 %token <Integer>    TT_Integer
@@ -39,15 +40,15 @@
 
 statements:
     /* nothing */
-  | statements statement
+  | statements statement     TT_EOS
+  | statements /* nothing */ TT_EOS
   ;
 
 statement:
-    expression TT_EOS {
-        printf(">%lf\n", ast_eval($1));
-        ast_free($1);
+    TT_ECHO expression {
+        printf(">%lf\n", ast_eval($2));
+        ast_free($2);
     }
-  | /* nothing */ TT_EOS
   ;
 
 expression:

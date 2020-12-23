@@ -16,9 +16,11 @@ EXPONENT        ({INTEGER}|{FLOAT})([eE][-+]?{INTEGER})
 
 %%
 
+ /* End of Statement */
 {LINE}  |
 ";"     { return TT_EOS; }
 
+ /* Operation */
 "+" |
 "-" |
 "*" |
@@ -26,6 +28,9 @@ EXPONENT        ({INTEGER}|{FLOAT})([eE][-+]?{INTEGER})
 "(" |
 ")"     { return yytext[0]; }
 "**"    { return TT_Pow; }
+
+ /* Keywords */
+"echo"  { return TT_ECHO; }
 
 {INTEGER}   {
     yylval.Integer = atoi(yytext);
