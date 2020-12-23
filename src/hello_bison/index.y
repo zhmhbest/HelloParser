@@ -38,12 +38,12 @@
 statements:
     /* nothing */
   | statements statement
-  | statements TT_EOS    /* 空语句 */
   ;
 
-statement: expression TT_EOS {
-    printf(">%lf\n", $1);
-};
+statement:
+   expression TT_EOS { printf(">%lf\n", $1); }
+ | TT_EOS
+ ;
 
 expression:
     number
@@ -53,7 +53,7 @@ expression:
   | expression '/' expression  { $$ = $1 / $3; }
   | expression TT_Pow expression  { $$ = pow($1, $3); }
   | '(' expression ')'            { $$ = $2; }
-  | '-' expression             { $$ = -$2; }
+  | '-' expression                { $$ = -$2; }
   ;
 
 number:
