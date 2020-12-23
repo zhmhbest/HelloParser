@@ -1,71 +1,62 @@
-
-/* description: Parses and executes mathematical expressions. */
-
-/* lexical grammar */
 %lex
 %%
 
-\s+                   /* skip whitespace */
+/* 词法分析 */
+<<EOF>>               return 'EOF'
+";"                   return 'EOS'
+(\r\n)|\n|\r          return 'EOS'
+[\ \t]+               /* ignore */
+
 [0-9]+("."[0-9]+)?\b  return 'NUMBER'
+"**"                  return '**'
 "*"                   return '*'
 "/"                   return '/'
 "-"                   return '-'
 "+"                   return '+'
-"^"                   return '^'
-"!"                   return '!'
-"%"                   return '%'
 "("                   return '('
 ")"                   return ')'
 "PI"                  return 'PI'
 "E"                   return 'E'
-<<EOF>>               return 'EOF'
+"echo"                return 'ECHO'
 .                     return 'INVALID'
 
 /lex
 
-/* operator associations and precedence */
-
+/* 语法定义 */
 %left '+' '-'
 %left '*' '/'
-%left '^'
-%right '!'
-%right '%'
-%left UMINUS
+%left '**'
+%nonassoc UMINUS
+%start statements
 
-%start expressions
+%%
 
-%% /* language grammar */
+/* 语法分析 */
+statements:
+    /* nothing */
+  | statements statement     EOS
+  | statements statement     EOF
+  | statements /* nothing */ EOS
+  | statements /* nothing */ EOF
+  ;
 
-expressions
-    : e EOF
-        { typeof console !== 'undefined' ? console.log($1) : print($1); return $1; }
-    ;
+statement:
+    ECHO expression { typeof console !== 'undefined' ? console.log($2) : print($2); }
+  ;
 
-e
-    : e '+' e
-        {$$ = $1+$3;}
-    | e '-' e
-        {$$ = $1-$3;}
-    | e '*' e
-        {$$ = $1*$3;}
-    | e '/' e
-        {$$ = $1/$3;}
-    | e '^' e
-        {$$ = Math.pow($1, $3);}
-    | e '!'
-        {{
-          $$ = (function fact (n) { return n==0 ? 1 : fact(n-1) * n })($1);
-        }}
-    | e '%'
-        {$$ = $1/100;}
-    | '-' e %prec UMINUS
-        {$$ = -$2;}
-    | '(' e ')'
-        {$$ = $2;}
-    | NUMBER
-        {$$ = Number(yytext);}
-    | E
-        {$$ = Math.E;}
-    | PI
-        {$$ = Math.PI;}
-    ;
+expression:
+    Number
+  | '(' expression ')'          { $$ = $2; }
+  | expression '+'  expression  { $$ = $1 + $3; }
+  | expression '-'  expression  { $$ = $1 - $3; }
+  | expression '*'  expression  { $$ = $1 * $3; }
+  | expression '/'  expression  { $$ = $1 / $3; }
+  | expression '**' expression  { $$ = Math.pow($1, $3); }
+  | '-' expression %prec UMINUS { $$ = -$2; }
+  ;
+
+Number:
+   NUMBER { $$ = Number(yytext); }
+ | E      { $$ = Math.E; }
+ | PI     { $$ = Math.PI; }
+ ;
