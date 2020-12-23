@@ -28,10 +28,12 @@
 /* %left      左结合
  * %right     右结合
  * %nonassoc  不可结合
+ * 定义靠后的优先级更高
  */
 %left '+' '-'
 %left '*' '/'
 %left TT_Pow
+%nonassoc UMINUS /* 一元减号（unitary minus） */
 
 /* 文法的开始符号（省略则默认第一条） */
 %start statements
@@ -59,7 +61,7 @@ expression:
   | expression '*' expression     { $$ = ast_new('*', $1, $3); }
   | expression '/' expression     { $$ = ast_new('/', $1, $3); }
   | expression TT_Pow expression  { $$ = ast_new(TT_Pow, $1, $3); }
-  | '-' expression                { $$ = ast_new(TT_Negative, $2, NULL); }
+  | '-' expression %prec UMINUS   { $$ = ast_new(TT_Negative, $2, NULL); }
   ;
 
 number:
