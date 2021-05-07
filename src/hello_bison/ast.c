@@ -49,7 +49,7 @@ double ast_eval(struct ast *a)
     case TT_Pow:
         v = pow(ast_eval(a->l), ast_eval(a->r));
         break;
-    case TT_Negative:
+    case TT_Neg:
         v = -ast_eval(a->l);
         break;
     default:
@@ -69,7 +69,7 @@ void ast_free(struct ast *a)
     case TT_Pow:
         ast_free(a->r);
 
-    case TT_Negative:
+    case TT_Neg:
         ast_free(a->l);
 
     case TT_Float:

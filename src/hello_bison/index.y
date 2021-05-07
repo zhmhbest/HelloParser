@@ -13,7 +13,7 @@
 /* 定义Token类型 */
 %token TT_EOS       // End of Statement
 %token TT_Pow       // 次幂
-%token TT_Negative  // 取负
+%token TT_Neg       // 取负（unitary minus）
 %token TT_ECHO      // 关键字：echo
 
 /* 定义返回指定Token时yylval的类型 */
@@ -33,7 +33,7 @@
 %left '+' '-'
 %left '*' '/'
 %left TT_Pow
-%nonassoc UMINUS /* 一元减号（unitary minus） */
+%nonassoc TT_Neg
 
 /* 文法的开始符号（省略则默认第一条） */
 %start statements
@@ -61,7 +61,7 @@ expression:
   | expression '*' expression     { $$ = ast_new('*', $1, $3); }
   | expression '/' expression     { $$ = ast_new('/', $1, $3); }
   | expression TT_Pow expression  { $$ = ast_new(TT_Pow, $1, $3); }
-  | '-' expression %prec UMINUS   { $$ = ast_new(TT_Negative, $2, NULL); }
+  | '-' expression %prec TT_Neg   { $$ = ast_new(TT_Neg, $2, NULL); }
   ;
 
 number:
