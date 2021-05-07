@@ -5,9 +5,6 @@
     #include <string.h>
     FILE *yyin;
     char *yytext;
-    int yylineno;
-    // void yyrestart(FILE*);
-    // extern int yylval;
     int yylex(void);
 
     // #define YY_WRAP_EOF 1
