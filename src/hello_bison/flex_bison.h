@@ -19,5 +19,4 @@ extern int yylex(void);
 extern YYSTYPE yylval;
 extern int yyparse(void);
 extern void yyerror(const char *, ...);
-
-#define YYDEBUG 1
+// #define YYDEBUG 1
