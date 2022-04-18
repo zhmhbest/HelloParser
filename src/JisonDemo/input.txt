@@ -1,0 +1,5 @@
+echo 2**8
+echo PI - 3
+echo 10/3
+echo 2 * 5
+echo 3--2; echo 0.618
