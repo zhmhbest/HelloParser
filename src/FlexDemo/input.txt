@@ -2,4 +2,6 @@ Hello Flex
 love=521
 pi=3.14
 # comment
+0b110 0777 255 0xFF
+-3.12e10 -3E-2
 ?

@@ -17,21 +17,29 @@
 
 %x COMMENT
 
-LETTER  [_A-Za-z]
-DIGIT   [0-9]
-WORD    [_A-Za-z0-9]
 BLANK   [\ \f\r\t\v]
 LINE    (\r\n|\n|\r)
 
-IDENTIFIER      {LETTER}{WORD}*
-INTEGER         {DIGIT}+
-FLOAT           {INTEGER}\.{INTEGER}
+LETTER  [_A-Za-z]
+WORD    [_A-Za-z0-9]
+IDENTIFIER  {LETTER}{WORD}*
+
+INT_BIN     0[Bb][0-1]+
+INT_OCT     0[0-7]+
+INT_DEC     [1-9][0-9]*
+INT_HEX     0[Xx][0-9a-fA-F]+
+INTEGER     -?({INT_BIN}|{INT_HEX}|{INT_OCT}|{INT_DEC})
+DECIMAL     -?{INT_DEC}
+
+FLOAT_DEC   -?{DECIMAL}\.{DECIMAL}
+FLOAT_EXP   ({FLOAT_DEC}|{DECIMAL})[Ee]{DECIMAL}
+FLOAT       {FLOAT_DEC}|{FLOAT_EXP}
 
 %%
 
 {IDENTIFIER}            { return TT_ID; }
-"-"?{INTEGER}           { return TT_Integer; }
-"-"?{FLOAT}             { return TT_Float; }
+{INTEGER}               { return TT_Integer; }
+{FLOAT}                 { return TT_Float; }
 "="                     { return TT_OP; }
 
 {LINE}                  { /* ignore */ }
